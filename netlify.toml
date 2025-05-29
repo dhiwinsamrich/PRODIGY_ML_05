@@ -1,0 +1,20 @@
+[build]
+  command = "cd netlify/functions && npm install"
+  publish = "public"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-core"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["Model.h5", "App.py", "requirements.txt", "!node_modules/**"]
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
