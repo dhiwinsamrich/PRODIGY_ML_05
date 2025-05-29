@@ -35,6 +35,10 @@ def prepare_image(img_path):
 
 app = Flask(__name__)
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify(status="ok"), 200
+
 
 @app.route('/predict', methods=['POST'])
 def infer_image():

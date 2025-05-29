@@ -64,23 +64,60 @@ This application uses machine learning to predict the type of food in an image a
 
 3. Access the app at http://localhost:8501
 
-## Netlify Deployment
+## Render Deployment
 
-This project is configured for Netlify deployment, but note that Netlify doesn't directly support running Streamlit applications. The Netlify configuration provides an informational page about how to run the app locally.
+This project is configured for deployment on Render using Docker. Render allows you to deploy both the Streamlit application and the Flask API as separate web services.
+
+### Prerequisites
+
+- A Render account ([https://render.com/](https://render.com/))
+- Your project pushed to a Git repository (GitHub, GitLab, etc.)
 
 ### Deployment Steps
 
-1. Push your code to a Git repository (GitHub, GitLab, etc.)
+1.  **Create a New Blueprint Instance on Render:**
+    *   Log in to your Render dashboard.
+    *   Click on "New" -> "Blueprint".
+    *   Connect your Git repository where this project is hosted.
+    *   Render will detect the `render.yaml` file in your repository.
 
-2. Sign up or log in to [Netlify](https://www.netlify.com/)
+2.  **Configure Services:**
+    *   The `render.yaml` file defines two services:
+        *   `food-calorie-app`: The Flask API.
+        *   `food-calorie-streamlit`: The Streamlit application.
+    *   Review the settings for each service (plan, build command, start command, environment variables).
+    *   Ensure the `PYTHON_VERSION` matches your project's requirements.
+    *   The `plan` is set to `free` by default. You can change this to a paid plan if needed.
 
-3. Create a new site from Git:
-   - Click "Add new site" → "Import an existing project"
-   - Connect to your Git provider and select your repository
+3.  **Deploy:**
+    *   Click "Create Blueprint Instance" (or similar button) to start the deployment process.
+    *   Render will build and deploy both services based on the `Dockerfile` and `render.yaml` configuration.
+    *   You will get unique URLs for both the API and the Streamlit app once deployed.
 
-4. Netlify will automatically detect the configuration in `netlify.toml`
+4.  **Set Environment Variables for Keep-Alive (Optional but Recommended):**
+    *   After deployment, note the URLs for your API and Streamlit services.
+    *   If you plan to use the `keep_alive.py` script, set the following environment variables where you run the script (e.g., locally or on another server/cron job provider):
+        *   `RENDER_API_URL`: The URL of your deployed Flask API (e.g., `https://your-api-service-name.onrender.com/health`)
+        *   `RENDER_STREAMLIT_URL`: The URL of your deployed Streamlit app (e.g., `https://your-streamlit-service-name.onrender.com/_stcore/health`)
 
-5. Deploy the site
+### Keep-Alive Functionality
+
+Render's free web services can spin down after a period of inactivity. To prevent this, a `keep_alive.py` script is included in this repository.
+
+**How to use `keep_alive.py`:**
+
+1.  **Set Environment Variables:**
+    *   Ensure `RENDER_API_URL` and `RENDER_STREAMLIT_URL` are set in the environment where you will run this script.
+
+2.  **Run the script:**
+    ```bash
+    python keep_alive.py
+    ```
+    This script will periodically send GET requests to the health check endpoints of your deployed services, keeping them active.
+
+3.  **Alternative for Keep-Alive:**
+    *   You can use a cron job service (like `cron-job.org`, GitHub Actions scheduled workflows, or a scheduler on another server) to periodically hit your service URLs.
+    *   Render also offers paid plans that do not spin down services.
 
 ## How It Works
 

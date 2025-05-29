@@ -36,15 +36,22 @@ upload_images/*
 .env.local
 
 # Node.js
-node_modules/
+# node_modules/ # Usually handled by global gitignore or project specific if needed
 npm-debug.log
 yarn-error.log
+
+# Render
+render.yaml
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+
+# Deployment specific (if not committed)
+# .env # Already present
+# .env.local # Already present
 
 # OS specific
 .DS_Store
