@@ -41,3 +41,6 @@ Pillow==10.4.0
 gunicorn==22.0.0
 uvicorn==0.29.0
 Flask==3.0.0
+# Ensure h5py is included for the model compatibility fix
+h5py==3.11.0
+json5==0.9.14  # For better JSON handling

@@ -2,7 +2,9 @@ import streamlit as st
 from PIL import Image
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
-from keras.models import load_model
+# Import the custom model loader instead of the standard one
+# from keras.models import load_model
+from model_compatibility import load_model_with_compatibility as load_model
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -11,6 +13,7 @@ import os
 if not os.path.exists('./upload_images'):
     os.makedirs('./upload_images')
 
+# Use the compatibility loader instead of the standard one
 model = load_model('Model.h5')
 labels = {0: 'apple', 1: 'banana', 2: 'beetroot', 3: 'bell pepper', 4: 'cabbage', 5: 'capsicum', 6: 'carrot',
           7: 'cauliflower', 8: 'chilli pepper', 9: 'corn', 10: 'cucumber', 11: 'eggplant', 12: 'garlic', 13: 'ginger',
